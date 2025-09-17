@@ -11,6 +11,7 @@ MULTIMODAL_EPOCHS = 1
 TABULAR_EPOCHS = 300
 
 
+TARGET_COL = 'icd_code_broad' # icd_code_broad, diagnosis, disposition_grouped
 
 VAL_SIZE = 0.2
 TEST_SIZE = 0.2

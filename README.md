@@ -95,12 +95,12 @@ The repository includes a Jupyter notebook, `plotting.ipynb`, to facilitate the 
 
 This project's code is licensed under the [Choose an appropriate open-source license, e.g., MIT, Apache 2.0]. You may use, modify, and distribute the code in accordance with the terms of this license.
 
-### **Citation**
+<!-- ### **Citation**
 
 If you use this code in your research, please cite the following paper. The paper is currently under review at *Nature Digital Medicine*.
 
 > Yusuf Brima. "An Investigation into the Robustness and Scalability of Machine Learning Models on ED and ICU Data Under Class Imbalance." Submitted to *Nature Digital Medicine*.
-> *Submission guidelines:* [https://www.nature.com/collections/fjiebeacie/how-to-submit](https://www.nature.com/collections/fjiebeacie/how-to-submit)
+> *Submission guidelines:* [https://www.nature.com/collections/fjiebeacie/how-to-submit](https://www.nature.com/collections/fjiebeacie/how-to-submit) -->
 
 Additionally, please cite the datasets as follows:
 
