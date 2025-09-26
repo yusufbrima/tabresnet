@@ -80,39 +80,6 @@ def get_class_weights(y, strategy="inverse", beta=0.9999):
     return np.array(weights, dtype=np.float32), unique_classes
 
 
-# def get_class_weights(y, strategy="inverse", beta=0.9999):
-#     """
-#     Compute class weights for imbalanced datasets.
-    
-#     Args:
-#         y (array-like): training labels
-#         strategy (str): "inverse" | "effective" | "median"
-#         beta (float): smoothing factor for 'effective' strategy
-    
-#     Returns:
-#         np.array: weights aligned with sorted unique classes
-#         np.array: unique classes
-#     """
-#     unique_classes, counts = np.unique(y, return_counts=True)
-
-#     if strategy == "inverse":
-#         weights = compute_class_weight(class_weight='balanced', classes=unique_classes, y=y)
-
-#     elif strategy == "effective":
-#         effective_num = 1.0 - np.power(beta, counts)
-#         weights = (1.0 - beta) / effective_num
-#         weights = weights / np.sum(weights) * len(unique_classes)  # normalize like sklearn
-
-#     elif strategy == "median":
-#         freq = counts / np.sum(counts)
-#         median_freq = np.median(freq)
-#         weights = median_freq / freq
-
-#     else:
-#         raise ValueError(f"Unknown strategy: {strategy}. Use 'inverse', 'effective', or 'median'.")
-
-#     return np.array(weights, dtype=np.float32), unique_classes
-
 def compute_class_weights_effective_num(y, beta=0.9999):
     """
     Class-Balanced Loss Based on Effective Number of Samples (Cui et al. 2019)

@@ -257,23 +257,6 @@ patient_outcomes['discharge_category'] = patient_outcomes.apply(
 patient_outcomes['discharge_category'] = patient_outcomes['discharge_category'].str.replace('_', ' ')
 
 
-# def create_discharge_category(hospital_status, unit_status):
-#     if unit_status == 'Expired' or hospital_status == 'Expired':
-#         return 'Death'
-#     elif hospital_status in ['Home', 'Hospice']:
-#         return 'Home_Hospice'
-#     elif hospital_status in ['Rehabilitation', 'Skilled Nursing Facility', 'Long Term Acute Care']:
-#         return 'Extended_Care'
-#     else:
-#         return 'Other_Hospital'  # Transfer to another acute care facility
-
-# patient_outcomes['discharge_category'] = patient_outcomes.apply(
-#     lambda row: create_discharge_category(
-#         row.get('hospitaldischargestatus', ''), 
-#         row.get('unitdischargestatus', '')
-#     ), axis=1
-# )
-
 # 5. RESOURCE UTILIZATION CATEGORIES (4 classes)
 # Based on combination of LOS and interventions
 def create_resource_category(row):

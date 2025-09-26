@@ -3,26 +3,23 @@
 # --------------------------
 # CONFIGURATION
 # --------------------------
-n_experiments=50   # total number of experiments
-start_id=1        # starting experiment id
+n_experiments=10
+start_id=1
 
-# Target columns for each dataset
-eicu_target_cols=("los_category" "severity_category" "discharge_category" "resource_category")
+eicu_target_cols=("mortality_risk_category" "los_category" "severity_category" "discharge_category" "resource_category")
 mimic_target_cols=("icd_code_broad" "diagnosis" "disposition_grouped")
-
-# Weighting strategies
 weighting_strategies=("noweighting" "inverse" "effective" "median")
+trainers=("tabresnet_trainer.py" "trad_ml_trainer.py" "tabnet_trainer.py")
 
 # --------------------------
-# MAIN LOOP
+# BUILD JOB LIST
 # --------------------------
+job_file="jobs.txt"
+> "$job_file"
+
 for ((i=0; i<n_experiments; i++)); do
   exp_id=$((start_id + i))
-  echo "========== Running Experiment $exp_id =========="
-
   for dataset_flag in "eicu" "mimic"; do
-    echo "---- Dataset: $dataset_flag ----"
-
     if [ "$dataset_flag" == "eicu" ]; then
       target_cols=("${eicu_target_cols[@]}")
     else
@@ -31,15 +28,18 @@ for ((i=0; i<n_experiments; i++)); do
 
     for col in "${target_cols[@]}"; do
       for strategy in "${weighting_strategies[@]}"; do
-        echo "Running tabresnet_trainer.py with exp_id=${exp_id}, dataset=${dataset_flag}, target_col=${col}, weighting_strategy=${strategy}"
-        python tabresnet_trainer.py --experiment_id "$exp_id" --random_seed "$exp_id" --dataset_flag "$dataset_flag" --target_col "$col" --weighting_strategy "$strategy"
-
-        echo "Running tab_train_trad.py with exp_id=${exp_id}, dataset=${dataset_flag}, target_col=${col}, weighting_strategy=${strategy}"
-        python tab_train_trad.py --experiment_id "$exp_id" --random_seed "$exp_id" --dataset_flag "$dataset_flag" --target_col "$col" --weighting_strategy "$strategy"
-
-        echo "Running tabnet_trainer.py with exp_id=${exp_id}, dataset=${dataset_flag}, target_col=${col}, weighting_strategy=${strategy}"
-        python tabnet_trainer.py --experiment_id "$exp_id" --random_seed "$exp_id" --dataset_flag "$dataset_flag" --target_col "$col" --weighting_strategy "$strategy"
+        for trainer in "${trainers[@]}"; do
+          echo "python $trainer --experiment_id $exp_id --random_seed $exp_id --dataset_flag $dataset_flag --target_col $col --weighting_strategy $strategy" >> "$job_file"
+        done
       done
     done
   done
 done
+
+echo "Prepared job list with $(wc -l < $job_file) runs."
+
+# --------------------------
+# RUN JOBS IN PARALLEL
+# --------------------------
+# Change -P 8 to the number of jobs you want to run at once
+cat jobs.txt | xargs -P 8 -I {} bash -c {}

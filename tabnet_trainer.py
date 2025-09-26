@@ -24,6 +24,8 @@ import argparse
 # Start timing the overall experiment
 overall_start_time = time.time()
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # Step 1: parse dataset_flag first
 parser = argparse.ArgumentParser(description="Run models with specified configuration.")
 parser.add_argument("--dataset_flag", type=str, default="eicu", choices=["eicu", "mimic"], help="Dataset flag (either 'eicu' or 'mimic').")
@@ -166,7 +168,7 @@ for filter_size in filter_sizes:
     class_weight_dict = {cls: w for cls, w in zip(unique_classes, class_weights)}
     lr = 0.0018294599871120757
     weight_decay = 0.0017793935803061614
-    models = {"TabNet": TabNetClassifier(optimizer_fn=torch.optim.AdamW,optimizer_params=dict(lr=lr, weight_decay=weight_decay),)}
+    models = {"TabNet": TabNetClassifier(optimizer_fn=torch.optim.AdamW,optimizer_params=dict(lr=lr, weight_decay=weight_decay),device_name=device.type)}
 
     X_train_part = X_train_part.apply(pd.to_numeric, errors="coerce").fillna(0).astype(np.float32)
     X_val = X_val.apply(pd.to_numeric, errors="coerce").fillna(0).astype(np.float32)
