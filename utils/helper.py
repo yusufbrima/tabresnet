@@ -138,7 +138,9 @@ def quantify_dataset_imbalance(class_counts=None, class_weights=None):
         'entropy': None
     }
 
-    if class_weights is not None:
+    if class_counts is not None:
+        class_counts = np.array(class_counts)
+        class_weights = class_counts / class_counts.sum()
         class_weights = np.array(class_weights)
         mean_weight = np.mean(class_weights)
         std_weight = np.std(class_weights)
