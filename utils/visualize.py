@@ -14,7 +14,7 @@ import numpy as np
 import os, json
 from models.trainer import tabtrain
 
-def plot_targets_correlation(targets, config, dataset_flag, EXPERIMENT_ID, save_path=None):
+def plot_targets_correlation(targets, config, dataset_flag, experiment_ids, save_path=None):
     """
     Plots correlation heatmaps for multiple targets, each in its own subplot.
 
@@ -22,35 +22,46 @@ def plot_targets_correlation(targets, config, dataset_flag, EXPERIMENT_ID, save_
         targets (list of str): List of target names.
         config: Config object with RESULT_PATH attribute.
         dataset_flag (str): Dataset identifier.
-        EXPERIMENT_ID (str): Experiment ID used in filenames.
+        experiment_ids (list): Experiment IDs.
         save_path (str, optional): Path to save the figure. If None, figure is not saved.
     """
     metrics = ['cv_class_weights', 'imbalance_ratio', 'entropy']
     weighting_strategy = ["inverse", "effective", "median", "noweighting"]
 
-    # Collect correlation results for all targets
+    overall_results = {}
+    for experiment_id in experiment_ids:
+        # Collect correlation results for all targets
+        all_targets_results = {}
+
+        for target in targets:
+            allresults = {}
+
+            for strategy in weighting_strategy[:-1]:  # skip "noweighting"
+                file_path = os.path.join(
+                    config.RESULT_PATH,
+                    f"all_neural_models_metrics_{target}_{dataset_flag}_{strategy}_{experiment_id}.json"
+                )
+                with open(file_path, "r") as f:
+                    neural_results = json.load(f)
+
+                nn = neural_results['AdvancedTabularClassifier']
+
+                for metric in metrics:
+                    key = f"{metric}_{strategy}"
+                    allresults[key] = nn.get(metric, None)
+
+            all_res_df = pd.DataFrame(allresults)
+            all_targets_results[target] = all_res_df.corr()
+        overall_results[experiment_id] = all_targets_results
+
+    # Average correlation matrices across experiments
     all_targets_results = {}
-
     for target in targets:
-        allresults = {}
-
-        for strategy in weighting_strategy[:-1]:  # skip "noweighting"
-            file_path = os.path.join(
-                config.RESULT_PATH,
-                f"all_neural_models_metrics_{target}_{dataset_flag}_{strategy}_{EXPERIMENT_ID}.json"
-            )
-            with open(file_path, "r") as f:
-                neural_results = json.load(f)
-
-            nn = neural_results['AdvancedTabularClassifier']
-
-            for metric in metrics:
-                key = f"{metric}_{strategy}"
-                allresults[key] = nn.get(metric, None)
-
-        all_res_df = pd.DataFrame(allresults)
-        all_targets_results[target] = all_res_df.corr()
-
+        corr_matrices = [overall_results[exp_id][target] for exp_id in experiment_ids if target in overall_results[exp_id]]
+        if corr_matrices:
+            avg_corr = sum(corr_matrices) / len(corr_matrices)
+            all_targets_results[target] = avg_corr
+    
     # ---- Plotting ----
     n_targets = len(targets)
     ncols = 3
@@ -61,6 +72,7 @@ def plot_targets_correlation(targets, config, dataset_flag, EXPERIMENT_ID, save_
 
     for ax, (target, corr_df) in zip(axes, all_targets_results.items()):
         clean_labels = [col.replace("_", " ").title() for col in corr_df.columns]
+        clean_labels = [label.replace("Cv Class Weights", "CVCF").replace("Imbalance Ratio", "IR").replace("Entropy", "ECD") for label in clean_labels]
         corr_df.columns = clean_labels
         corr_df.index = clean_labels
         sns.heatmap(
@@ -75,7 +87,7 @@ def plot_targets_correlation(targets, config, dataset_flag, EXPERIMENT_ID, save_
             ax=ax,
             annot_kws={'size': 16}
         )
-        ax.set_title(f"{target.replace('_',' ').title()} Prediction", fontsize=18)
+        ax.set_title(f"{target.replace('_',' ').title()}", fontsize=18)
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=16)
         ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=16)
 
