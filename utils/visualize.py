@@ -72,7 +72,7 @@ def plot_targets_correlation(targets, config, dataset_flag, experiment_ids, save
 
     for ax, (target, corr_df) in zip(axes, all_targets_results.items()):
         clean_labels = [col.replace("_", " ").title() for col in corr_df.columns]
-        clean_labels = [label.replace("Cv Class Weights", "CVCF").replace("Imbalance Ratio", "IR").replace("Entropy", "ECD") for label in clean_labels]
+        clean_labels = [label.replace("Cv Class Weights", "CVCF").replace("Imbalance Ratio", "IR").replace("Entropy", "NECD") for label in clean_labels]
         corr_df.columns = clean_labels
         corr_df.index = clean_labels
         sns.heatmap(
@@ -88,8 +88,8 @@ def plot_targets_correlation(targets, config, dataset_flag, experiment_ids, save
             annot_kws={'size': 16}
         )
         ax.set_title(f"{target.replace('_',' ').title()}", fontsize=18)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=16)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=16)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=18)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=18)
 
     # Hide leftover axes
     for ax in axes[len(all_targets_results):]:

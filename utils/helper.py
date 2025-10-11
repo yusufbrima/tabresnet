@@ -148,16 +148,30 @@ def quantify_dataset_imbalance(class_counts=None, class_weights=None):
 
     if class_counts is not None:
         class_counts = np.array(class_counts)
+
         # Avoid division by zero in imbalance ratio
         if np.min(class_counts) > 0:
             results['imbalance_ratio'] = np.max(class_counts) / np.min(class_counts)
         else:
             results['imbalance_ratio'] = None
 
+        # Compute class proportions
         proportions = class_counts / class_counts.sum()
-        # Calculate entropy, avoid log(0) by masking zero proportions
-        entropy = -np.sum(proportions[proportions > 0] * np.log(proportions[proportions > 0]))
-        results['entropy'] = entropy
+
+        # Filter out zero proportions to avoid log(0)
+        proportions = proportions[proportions > 0]
+        n_classes = len(proportions)
+
+        if n_classes <= 1:
+            results['entropy'] = 0.0  # No diversity with 0 or 1 class
+        else:
+            # Compute Shannon entropy
+            raw_entropy = -np.sum(proportions * np.log(proportions))
+
+            # Normalize by maximum possible entropy
+            max_entropy = np.log(n_classes)
+            necd = raw_entropy / max_entropy if max_entropy > 0 else 0.0
+            results['entropy'] = necd
 
     return results
 
