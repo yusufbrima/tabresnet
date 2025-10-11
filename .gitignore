@@ -1,5 +1,7 @@
 # ignore config2.py
 config2.py
+patcher.py
+patcher_all.py
 #  ignore jobs_logs/
 jobs_logs/
 
