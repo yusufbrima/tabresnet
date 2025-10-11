@@ -1,0 +1,14 @@
+# ignore config2.py
+config2.py
+#  ignore jobs_logs/
+jobs_logs/
+
+# ingore .vscode/
+.vscode/
+
+# ignore jobs.txt 
+jobs.txt
+# ignore .ipynb_checkpoints
+.ipynb_checkpoints
+# ignore run_tabular_trainer.sh
+run_tabular_trainer.sh
