@@ -14,3 +14,5 @@ jobs.txt
 .ipynb_checkpoints
 # ignore run_tabular_trainer.sh
 run_tabular_trainer.sh
+
+.env

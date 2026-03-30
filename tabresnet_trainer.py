@@ -157,7 +157,7 @@ for filter_size in filter_sizes:
     for name, model in models.items():
         print(f"\n===== Training {name} with FILTER_SIZE={filter_size} =====")
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
         class_weights_tensor = class_weights.to(device)
 
         if weighting_strategy == 'noweighting':

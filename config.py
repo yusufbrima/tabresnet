@@ -1,10 +1,10 @@
-MIMIC_IV_ED_PATH = '/path/to/physionet.org/files/mimic-iv-ed/2.2/ed/'
+MIMIC_IV_ED_PATH = '/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/physionet.org/files/mimic-iv-ed/2.2/ed/'
 
-MIMIC_CXR_PATH = "/path/to/physionet.org/files/mimic-cxr/2.1.0"
+MIMIC_CXR_PATH = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/physionet.org/files/mimic-cxr/2.1.0"
 
-MIMIC_CXR_JPG_PATH = "/path/to/physionet.org/files/mimic-cxr-jpg/2.1.0"
+MIMIC_CXR_JPG_PATH = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/Datasets/physionet.org/files/mimic-cxr-jpg/2.1.0"
 
-EICU_PATH = "/path/to/physionet.org/files/eicu-crd/2.0"
+EICU_PATH = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/physionet.org/files/eicu-crd/2.0"
 
 VISION_EPOCHS  = 20
 MULTIMODAL_EPOCHS = 1 
@@ -25,10 +25,10 @@ BATCH_SIZE = 32
 
 MIMIC_TARGETS = ['disposition_grouped','icd_code_broad','diagnosis']
 
-OUTPUT_PATH  = "/path/to/Data"
+OUTPUT_PATH  = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/Data"
 RESULT_PATH = "./results" 
-MODEL_PATH = "/path/to/models"
-FIG_PATH = "/path/to/figures"
+MODEL_PATH = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/MXAI/models"
+FIG_PATH = "/net/projects/scratch/winter/valid_until_31_July_2026/ybrima/MXAI/figures"
 LOOK_UP_TABLE = {3: '786', 2: '780', 6: 'R07', 1: '486', 4: '789', 5: 'J18', 0: '428'}
 CUTOFF = "mimic_multimodal_image_centric_streamlined_found_fixed.csv"
 EICU_FILE = 'eicu_merged_dataset.csv'
@@ -51,7 +51,7 @@ MIMIC_TARGET_LABELS = {
     "diagnosis": "Diagnosis Prediction"
 }
 
-DATASET_FLAG = 'eicu' #'mimic', 'eicu'
+DATASET_FLAG = 'mimic' #'mimic', 'eicu'
 
 if DATASET_FLAG == 'eicu':
     # Filter Sizes for EICU
