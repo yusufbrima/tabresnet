@@ -33,7 +33,8 @@ LOOK_UP_TABLE = {3: '786', 2: '780', 6: 'R07', 1: '486', 4: '789', 5: 'J18', 0: 
 CUTOFF = "mimic_multimodal_image_centric_streamlined_found_fixed.csv"
 EICU_FILE = 'eicu_merged_dataset.csv'
 
-EICU_TARGETS = ['mortality_risk_category', 'los_category', 'severity_category','discharge_category','resource_category']
+# EICU_TARGETS = ['mortality_risk_category', 'los_category', 'severity_category','discharge_category','resource_category']
+EICU_TARGETS = ['los_category', 'severity_category','discharge_category','resource_category']
 MIMIC_TARGETS = ['disposition_grouped','icd_code_broad','diagnosis']
 
 

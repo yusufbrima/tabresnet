@@ -16,3 +16,10 @@ jobs.txt
 run_tabular_trainer.sh
 
 .env
+
+config1.py
+configold.py
+results_copy/
+Prepper.ipynb
+nanotabpfn_trainer.py
+report.md
